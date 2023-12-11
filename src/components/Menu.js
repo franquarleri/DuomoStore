@@ -1,21 +1,9 @@
 // MainMenu.js
 import React, { useState } from 'react';
-import {
-  Button,
-  Menu,
-  MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
-  Select,
-  InputLabel,
-  FormControl,
-  Snackbar,
-} from '@mui/material';
+import { Button, Menu, MenuItem, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Select, InputLabel, FormControl, Snackbar } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-function MainMenu({ handleSale }) {
+function MainMenu({ handleSale, loggedIn }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState(null);
   const [stockSubMenuAnchorEl, setStockSubMenuAnchorEl] = useState(null);
@@ -30,6 +18,7 @@ function MainMenu({ handleSale }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [errorFields, setErrorFields] = useState([]);
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -135,15 +124,24 @@ function MainMenu({ handleSale }) {
     }
   };
 
+  const handleLogout = () => {
+    // Lógica para cerrar sesión
+    // Por ejemplo, podrías borrar las credenciales del usuario
+    // y redirigirlo a la página de inicio de sesión
+    navigate('/login');
+  };
+
   return (
     <div>
-      <Button
-        aria-controls="main-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-        Menú
-      </Button>
+      {loggedIn && (
+        <Button
+          aria-controls="main-menu"
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          Menú
+        </Button>
+      )}
       <Menu
         id="main-menu"
         anchorEl={anchorEl}
@@ -230,8 +228,14 @@ function MainMenu({ handleSale }) {
         onClose={handleSnackbarClose}
         message={snackbarMessage}
       />
+      {loggedIn && (
+        <Button onClick={handleLogout}>
+          Cerrar Sesión
+        </Button>
+      )}
     </div>
   );
 }
 
 export default MainMenu;
+
